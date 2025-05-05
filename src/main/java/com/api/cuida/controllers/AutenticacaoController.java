@@ -1,8 +1,8 @@
 package com.api.cuida.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.api.cuida.models.Paciente;
 import com.api.cuida.services.AutenticacaoService;
@@ -18,16 +18,18 @@ public class AutenticacaoController {
     // HTTP SESSION:
 
     @PostMapping("/login")
-    public ResponseEntity<Paciente> login(@RequestBody Paciente pacienteRequest, HttpSession session) {
-        Paciente paciente = autenticacaoService.login(pacienteRequest.getCpf(), pacienteRequest.getNomeMae(),
-                pacienteRequest.getCidadeNatal(), session);
-        return ResponseEntity.ok(paciente);
+    public ResponseEntity<Paciente> login(@RequestBody Paciente paciente, HttpSession session) {
+        Paciente res = autenticacaoService.login(paciente.getCpf(), paciente.getNomeMae(), paciente.getCidadeNatal());
+        
+        session.setAttribute("pacienteId", res.getId());
+
+        return ResponseEntity.ok(res);
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Void> logout(HttpSession session) {
+    public ResponseEntity<String> logout(HttpSession session) {
         autenticacaoService.logout(session);
-        return ResponseEntity.ok().build(); // Responde 200 OK
+        return ResponseEntity.status(HttpStatus.OK).body("Sessão finalizada com sucesso.");
     }
 
 }

@@ -1,7 +1,9 @@
 package com.api.cuida.models;
 
 public enum TipoAtendimento {
-    ODONTOLOGICO,
+    ADMINISTRATIVO,
+    CONSULTA_MEDICA,
     ENFERMAGEM,
-    MEDICO
+    ODONTOLOGIA,
+    ACOMPANHAMENTO_DOENCAS_CRONICAS
 }

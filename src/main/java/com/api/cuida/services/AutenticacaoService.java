@@ -1,7 +1,5 @@
 package com.api.cuida.services;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,13 +13,18 @@ public class AutenticacaoService {
     @Autowired
     private PacienteRepository pacienteRepository;
 
-    public Optional<Paciente> autenticar(String cpf, String nomeMae, String cidadeNatal, HttpSession session) {
-        Paciente paciente = pacienteRepository.buscarDadosUsuario(cpf, nomeMae, cidadeNatal);
+    public Paciente login(String cpf, String nomeMae, String cidadeNatal, HttpSession session) {
+        // Valida e busca o paciente no banco
+        Paciente paciente = pacienteRepository.findByCpfAndNomeMaeAndCidadeNatal(cpf, nomeMae, cidadeNatal)
+            .orElseThrow(() -> new RuntimeException("Paciente não encontrado"));
+
+        // Salva o ID do paciente na sessão
         session.setAttribute("pacienteId", paciente.getId());
+
         return paciente;
     }
 
     public void logout(HttpSession session) {
-        session.invalidate();
+        session.invalidate(); 
     }
 }

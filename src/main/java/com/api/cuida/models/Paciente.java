@@ -18,7 +18,7 @@ public class Paciente {
 
     private String cpf;
 
-    private String cidade_natal;
+    private String cidadeNatal;
 
-    private String nome_mae;
+    private String nomeMae;
 }

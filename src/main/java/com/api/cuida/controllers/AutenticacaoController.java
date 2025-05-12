@@ -12,13 +12,12 @@ import com.api.cuida.services.AutenticacaoService;
 
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = "http://localhost", allowCredentials = "true")
 @RestController
 public class AutenticacaoController {
     @Autowired
     private AutenticacaoService autenticacaoService;
 
-    @PostMapping("/login")
+    @PostMapping("/auth/login")
     public ResponseEntity<?> login(@RequestBody Paciente paciente) {
         Paciente res = autenticacaoService.login(paciente.getCpf(), paciente.getNomeMae(), paciente.getCidadeNatal());
         

@@ -9,11 +9,9 @@ spring:
       ddl-auto: update
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
-server:
-  servlet:
-    session:
-      cookie:
-        name: JSESSIONID
-        http-only: false  # Permite acesso via JavaScript (para desenvolvimento)
-        secure: false     # Permite cookies em HTTP (não apenas HTTPS)
-        same-site: lax    # Configuração de segurança para cookies
+
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: 3600
+  token-prefix: Bearer
+  header: Authorization

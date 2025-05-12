@@ -16,14 +16,14 @@ public class PacienteController {
     @Autowired
     private PacienteService pacienteService;
 
-    // TODO: recuperar pacientes
+    // Recuperar pacientes
     @GetMapping("/pacientes")
     public ResponseEntity<List<Paciente>> listarPacientes() {
         List<Paciente> pacientes = pacienteService.listarPacientes();
         return ResponseEntity.ok(pacientes);
     }
 
-    // TODO: recuperar paciente por cpf
+    // Recuperar paciente por cpf
     @GetMapping("/pacientes/{cpf}")
     public ResponseEntity<Paciente> listarPacientePorCpf(@PathVariable String cpf) {
         Optional<Paciente> paciente = pacienteService.listarPacientePorCpf(cpf);
@@ -31,14 +31,22 @@ public class PacienteController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // TODO: inserir paciente no sistema
+    // Recuperar paciente por id
+    @GetMapping("/pacientes/{id}")
+    public ResponseEntity<Paciente> listarPacientePorId(@PathVariable Long id) {
+        Optional<Paciente> paciente = pacienteService.listarPacientePorId(id);
+        return paciente.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    // Inserir paciente no sistema
     @PostMapping("/pacientes")
     public ResponseEntity<Paciente> cadastrarPaciente(@RequestBody Paciente paciente) {
         Paciente res = pacienteService.cadastrarPaciente(paciente);
         return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
 
-    // TODO: atualizar dados de paciente
+    // Atualizar dados de paciente
     @PutMapping("pacientes/{id}")
     public ResponseEntity<Paciente> atualizarPaciente(@PathVariable Long id, @RequestBody Paciente paciente) {
         try {
@@ -50,6 +58,7 @@ public class PacienteController {
         }
     }
 
+    // Deletar paciente do sistema
     @DeleteMapping("/pacientes/{id}")
     public ResponseEntity<Void> deletarPaciente(@PathVariable Long id) {
         try {

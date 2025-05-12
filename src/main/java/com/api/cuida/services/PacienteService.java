@@ -22,6 +22,10 @@ public class PacienteService {
         return pacienteRepository.findByCpf(cpf);
     }
 
+    public Optional<Paciente> listarPacientePorId(Long id) {
+        return pacienteRepository.findById(id);
+    }
+
     public Paciente cadastrarPaciente(Paciente paciente) {
         return pacienteRepository.save(paciente);
     }

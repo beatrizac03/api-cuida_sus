@@ -1,5 +1,8 @@
 package com.api.cuida.controllers;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -7,28 +10,33 @@ import org.springframework.http.ResponseEntity;
 import com.api.cuida.models.Paciente;
 import com.api.cuida.services.AutenticacaoService;
 
-import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "http://localhost", allowCredentials = "true")
 @RestController
 public class AutenticacaoController {
     @Autowired
     private AutenticacaoService autenticacaoService;
 
-    // HTTP SESSION:
-
     @PostMapping("/login")
-    public ResponseEntity<Paciente> login(@RequestBody Paciente paciente, HttpSession session) {
+    public ResponseEntity<?> login(@RequestBody Paciente paciente) {
         Paciente res = autenticacaoService.login(paciente.getCpf(), paciente.getNomeMae(), paciente.getCidadeNatal());
         
-        session.setAttribute("pacienteId", res.getId());
-
-        return ResponseEntity.ok(res);
+        if (res != null) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("ok", true);
+            response.put("message", "Autenticado com sucesso");
+            return ResponseEntity.ok(response);
+        } 
+        
+        Map<String, Object> errorResponse = new HashMap<>();
+        errorResponse.put("ok", false);
+        errorResponse.put("message", "Paciente não encontrado");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<String> logout(HttpSession session) {
-        autenticacaoService.logout(session);
+    public ResponseEntity<String> logout() {
         return ResponseEntity.status(HttpStatus.OK).body("Sessão finalizada com sucesso.");
     }
 

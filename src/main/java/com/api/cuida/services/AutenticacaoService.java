@@ -6,8 +6,6 @@ import org.springframework.stereotype.Service;
 import com.api.cuida.models.Paciente;
 import com.api.cuida.repositories.PacienteRepository;
 
-import jakarta.servlet.http.HttpSession;
-
 @Service
 public class AutenticacaoService {
     @Autowired
@@ -18,7 +16,7 @@ public class AutenticacaoService {
             .orElseThrow(() -> new RuntimeException("Paciente não encontrado"));
     }
 
-    public void logout(HttpSession session) {
-        session.invalidate(); 
+    public void logout() {
+        
     }
 }

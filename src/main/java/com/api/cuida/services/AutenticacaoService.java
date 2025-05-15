@@ -16,6 +16,11 @@ public class AutenticacaoService {
             .orElseThrow(() -> new RuntimeException("Paciente não encontrado"));
     }
 
+    public Paciente getUserByCpf(String cpf) {
+        return pacienteRepository.findByCpf(cpf)
+                .orElseThrow(() -> new RuntimeException("CPF não encontrado"));
+    }
+
     public void logout() {
         
     }

@@ -1,19 +1,18 @@
 package com.api.cuida.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+
 import com.api.cuida.infra.security.JWTService;
 import com.api.cuida.models.Paciente;
 import com.api.cuida.services.AutenticacaoService;
 
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
-@AllArgsConstructor
-@NoArgsConstructor
 public class AutenticacaoController {
     @Autowired
     private JWTService jwtService;
@@ -24,6 +23,10 @@ public class AutenticacaoController {
     @PostMapping("/auth/login")
     public String login(@RequestBody Paciente paciente) {
         Paciente res = autenticacaoService.login(paciente.getCpf(), paciente.getNomeMae(), paciente.getCidadeNatal());
+
+        if (res == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Paciente não encontrado");
+        }
 
         return jwtService.generateToken(res.getCpf());
     }

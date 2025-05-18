@@ -36,9 +36,9 @@ public class AutenticacaoController {
         return "Logout realizado com sucesso";
     }
 
-    @GetMapping("/me")
+    @GetMapping("/auth/me")
     public Paciente getMe(HttpServletRequest request) {
-        return (Paciente) request.getAttribute("cpf");
+        return (Paciente) request.getAttribute("paciente");
     }
 
 }

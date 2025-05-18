@@ -1,6 +1,8 @@
 package com.api.cuida.infra.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -8,6 +10,8 @@ import com.api.cuida.models.Paciente;
 import com.api.cuida.services.AutenticacaoService;
 
 import java.io.IOException;
+import java.util.List;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -35,17 +39,32 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             jwt = authHeader.substring(7);
-            cpf = jwtService.extractCpf(jwt);
-        }
-
-        if (cpf != null) {
-            Paciente paciente = autenticacaoService.getUserByCpf(cpf);
-            
-            if (jwtService.isTokenValid(jwt, paciente.getCpf())) {
-                // Autenticação válida - você pode armazenar o user no request se precisar
-                request.setAttribute("user", paciente);
+            try {
+                cpf = jwtService.extractCpf(jwt);
+            } catch (Exception e) {
+                // Se o token não for válido, não autentica
             }
         }
+
+        if (cpf != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        Paciente paciente = null;
+        try {
+            paciente = autenticacaoService.getUserByCpf(cpf);
+        } catch (Exception e) {
+            // paciente não encontrado
+        }
+
+        if (paciente != null && jwtService.isTokenValid(jwt, paciente.getCpf())) {
+            // Criar objeto Authentication e setar no contexto
+            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                    paciente, null, List.of() // se tiver roles, coloque aqui
+            );
+            SecurityContextHolder.getContext().setAuthentication(authToken);
+
+            // opcional: setar paciente no request
+            request.setAttribute("paciente", paciente);
+        }
+    }
         
         filterChain.doFilter(request, response);
     }

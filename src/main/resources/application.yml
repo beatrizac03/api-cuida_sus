@@ -12,6 +12,6 @@ spring:
 
 jwt:
   secret: ${JWT_SECRET}
-  expiration: 3600
+  expiration: 3600000
   token-prefix: Bearer
   header: Authorization

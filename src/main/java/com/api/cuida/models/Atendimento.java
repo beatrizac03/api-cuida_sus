@@ -20,7 +20,7 @@ public class Atendimento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idAtendimento;
+    private Long id;
 
     // odontologico, medico etc
     @Enumerated(EnumType.STRING)
@@ -37,8 +37,10 @@ public class Atendimento {
     // data da confirmação (check-in) do atendimento
     @CreationTimestamp
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
-    private LocalDateTime dataConfirmacao;
+    private LocalDateTime dataEntrada;
 
     // data em que foi atendido, ou cancelado o atendimento
-    private LocalDateTime dataFim;
+    private LocalDateTime dataSaida;
+
+    private boolean status;
 }

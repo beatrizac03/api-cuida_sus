@@ -3,9 +3,11 @@ package com.api.cuida.models;
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.cglib.core.Local;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import io.micrometer.common.lang.Nullable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -22,6 +24,10 @@ public class Atendimento {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne  // muitos atendimentos para um paciente
+    @JoinColumn(name = "id_paciente")
+    private Paciente paciente;
+
     // odontologico, medico etc
     @Enumerated(EnumType.STRING)
     private TipoAtendimento tipoAtendimento;
@@ -31,16 +37,21 @@ public class Atendimento {
     private TipoFila tipoFila;
 
     @ManyToOne
-    @JoinColumn(name = "funcionario_id")
+    @JoinColumn(name = "id_funcionario")
     private Funcionario funcionarioResponsavel;
 
-    // data da confirmação (check-in) do atendimento
+    // data em que foi criado o atendimento, caso seja um atendimento pré-agendado vai ser diferente do dataCheckin
     @CreationTimestamp
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
-    private LocalDateTime dataEntrada;
+    private LocalDateTime dataAtendimento;
+
+    // data da confirmação (check-in) do atendimento
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+    private LocalDateTime dataCheckin;
 
     // data em que foi atendido, ou cancelado o atendimento
-    private LocalDateTime dataSaida;
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+    private LocalDateTime dataCheckout;
 
     private boolean status;
 }

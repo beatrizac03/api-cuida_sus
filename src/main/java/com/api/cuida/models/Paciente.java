@@ -1,5 +1,6 @@
 package com.api.cuida.models;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,6 +17,7 @@ public class Paciente {
 
     private String nome;
 
+    @Column(unique = true)
     private String cpf;
 
     private String cidadeNatal;

@@ -1,4 +1,4 @@
-package com.api.cuida.infra.security;
+package com.api.cuida.infra.jwt;
 
 import org.springframework.stereotype.Service;
 
@@ -62,6 +62,15 @@ public class JWTService {
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
+    }
+
+    public boolean validateToken(String token) {
+        try {
+            extractAllClaims(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     private Claims extractAllClaims(String token) {

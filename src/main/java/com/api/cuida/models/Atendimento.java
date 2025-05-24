@@ -8,6 +8,7 @@ import org.springframework.cglib.core.Local;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import io.micrometer.common.lang.Nullable;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -32,10 +33,12 @@ public class Atendimento {
 
     // odontologico, medico etc
     @Enumerated(EnumType.STRING)
+    @Column(name = "tipo_atendimento")
     private TipoAtendimento tipoAtendimento;
 
     // comum ou preferencial
     @Enumerated(EnumType.STRING)
+    @Column(name = "tipo_fila")
     private TipoFila tipoFila;
 
     @ManyToOne(optional = true) 
@@ -58,5 +61,6 @@ public class Atendimento {
     private LocalDateTime dataCheckout;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "status_atendimento")
     private StatusAtendimento statusAtendimento;
 }

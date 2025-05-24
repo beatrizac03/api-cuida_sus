@@ -23,30 +23,29 @@ public class FilaService {
     @Autowired
     private PacienteRepository pacienteRepository;
 
-    // public int listarPosicaoNaFila(String cpf, TipoFila tipoFila, TipoAtendimento tipoAtendimento) {
-    //     Paciente paciente = pacienteRepository.findByCpf(cpf)
-    //             .orElseThrow(() -> new RuntimeException("Paciente não encontrado"));
+    // public int listarPosicaoNaFila(String cpf, TipoFila tipoFila, TipoAtendimento
+    // tipoAtendimento) {
+    // Paciente paciente = pacienteRepository.findByCpf(cpf)
+    // .orElseThrow(() -> new RuntimeException("Paciente não encontrado"));
 
-    //     Atendimento atendimento = atendimentoRepository.findByPaciente(paciente);
+    // Atendimento atendimento = atendimentoRepository.findByPaciente(paciente);
 
-    //     List<Atendimento> fila = atendimentoRepository
-    //             .findByTipoFilaAndTipoAtendimentoAndStatusAtendimentoAndDataCheckinBetween(tipoFila, tipoAtendimento,
-    //                     atendimento.getStatusAtendimento());
+    // List<Atendimento> fila = atendimentoRepository
+    // .findByTipoFilaAndTipoAtendimentoAndStatusAtendimentoAndDataCheckinBetween(tipoFila,
+    // tipoAtendimento,
+    // atendimento.getStatusAtendimento());
 
-    //     for (int i = 0; i < fila.size(); i++) {
-    //         if (fila.get(i).getPaciente().getId().equals(paciente.getId())) {
-    //             // posição começa em 1
-    //             return i + 1;
-    //         }
-    //     }
-
-    //     throw new RuntimeException("Paciente não está na fila");
+    // for (int i = 0; i < fila.size(); i++) {
+    // if (fila.get(i).getPaciente().getId().equals(paciente.getId())) {
+    // // posição começa em 1
+    // return i + 1;
+    // }
     // }
 
-    public void inserirNaFila(String cpf, TipoFila tipoFila, TipoAtendimento tipoAtendimento) {
-        Paciente paciente = pacienteRepository.findByCpf(cpf)
-                .orElseThrow(() -> new RuntimeException("Paciente não encontrado"));
+    // throw new RuntimeException("Paciente não está na fila");
+    // }
 
+    public Atendimento inserirNaFila(Paciente paciente, TipoFila tipoFila, TipoAtendimento tipoAtendimento) {
         Atendimento atendimento = new Atendimento();
 
         atendimento.setPaciente(paciente);
@@ -54,22 +53,24 @@ public class FilaService {
         atendimento.setTipoAtendimento(tipoAtendimento);
         atendimento.setStatusAtendimento(StatusAtendimento.AGUARDANDO_NA_FILA);
         atendimento.setDataCheckin(java.time.LocalDateTime.now());
-
         atendimentoRepository.save(atendimento);
+
+        return atendimento;
     }
 
-    // public void removerDaFila(String cpf, TipoFila tipoFila, TipoAtendimento tipoAtendimento) {
-    //     Paciente paciente = pacienteRepository.findByCpf(cpf)
-    //             .orElseThrow(() -> new RuntimeException("Paciente não encontrado"));
+    // public void removerDaFila(String cpf, TipoFila tipoFila, TipoAtendimento
+    // tipoAtendimento) {
+    // Paciente paciente = pacienteRepository.findByCpf(cpf)
+    // .orElseThrow(() -> new RuntimeException("Paciente não encontrado"));
 
-    //     // Optional<Atendimento> atendimento = atendimentoRepository
-    //     // .findByPacienteAndTipoFilaAndTipoAtendimento(paciente, tipoFila,
-    //     // tipoAtendimento);
+    // // Optional<Atendimento> atendimento = atendimentoRepository
+    // // .findByPacienteAndTipoFilaAndTipoAtendimento(paciente, tipoFila,
+    // // tipoAtendimento);
 
-    //     if (atendimento.isPresent()) {
-    //         atendimentoRepository.delete(atendimento.get());
-    //     } else {
-    //         throw new RuntimeException("Paciente não está na fila");
-    //     }
+    // if (atendimento.isPresent()) {
+    // atendimentoRepository.delete(atendimento.get());
+    // } else {
+    // throw new RuntimeException("Paciente não está na fila");
+    // }
     // }
 }

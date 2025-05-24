@@ -5,6 +5,8 @@ import java.util.List;
 import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -46,16 +48,22 @@ public class FilaController {
     // }
 
     @PostMapping("/fila")
-    public ResponseEntity<?> inserirNaFila(HttpServletRequest request, @RequestBody FilaRequest dtoFila) {
-        Paciente paciente = (Paciente) request.getAttribute("paciente");
-
-        if (paciente == null) {
-            return ResponseEntity.status(403).body("Paciente não autenticado");
-        }
-
-        filaService.inserirNaFila(paciente.getCpf(), dtoFila.getTipoFila(), dtoFila.getTipoAtendimento());
-        return ResponseEntity.ok("Paciente inserido na fila com sucesso!");
+    public ResponseEntity<?> inserirNaFila(@AuthenticationPrincipal Paciente paciente, @RequestBody FilaRequest dtoFila) {
+        Atendimento atendimento = filaService.inserirNaFila(paciente, dtoFila.getTipoFila(), dtoFila.getTipoAtendimento());
+        return ResponseEntity.ok(atendimento);
     }
+
+    // @PostMapping("/fila")
+    // public ResponseEntity<?> inserirNaFila(@AuthenticationPrincipal Paciente paciente, @RequestParam String tipoFila,
+    //         @RequestParam String tipoAtendimento) {
+    //     //TODO: process POST request
+        
+    //         Atendimento atendimento = filaService.inserirNaFila(paciente, TipoFila.valueOf(tipoFila),
+    //                 TipoAtendimento.valueOf(tipoAtendimento));
+
+    //     return ResponseEntity.ok(atendimento);
+    // }
+    
 
     @DeleteMapping("/fila/{cpf}")
     public String removerDaFila(HttpServletRequest request) {

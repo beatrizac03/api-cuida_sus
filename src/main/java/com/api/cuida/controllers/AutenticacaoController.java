@@ -2,12 +2,11 @@ package com.api.cuida.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
-import com.api.cuida.infra.security.JWTService;
+import com.api.cuida.infra.jwt.JWTService;
 import com.api.cuida.models.Paciente;
 import com.api.cuida.services.AutenticacaoService;
-
-import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -37,8 +36,8 @@ public class AutenticacaoController {
     }
 
     @GetMapping("/auth/me")
-    public Paciente getMe(HttpServletRequest request) {
-        return (Paciente) request.getAttribute("paciente");
+    public Paciente getMe(@AuthenticationPrincipal Paciente paciente) {
+        return paciente;
     }
 
 }

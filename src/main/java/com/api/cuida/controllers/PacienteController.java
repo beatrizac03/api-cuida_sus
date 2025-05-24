@@ -25,10 +25,10 @@ public class PacienteController {
 
     // Recuperar paciente por cpf
     @GetMapping("/pacientes/{cpf}")
-    public ResponseEntity<Paciente> listarPacientePorCpf(@PathVariable String cpf) {
-        Optional<Paciente> paciente = pacienteService.listarPacientePorCpf(cpf);
-        return paciente.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<Optional<Paciente>> listarPacientePorCpf(@PathVariable String cpf) {
+        Optional<Paciente> paciente = pacienteService.buscarPorCpf(cpf);
+
+        return ResponseEntity.ok(paciente);
     }
 
     // Recuperar paciente por id

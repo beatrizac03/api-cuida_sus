@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,13 +35,13 @@ public class FilaController {
     private FilaService filaService;
 
     @PostMapping("/fila/posicao")
-    public ResponseEntity<Integer> getPosicaoNaFila(@AuthenticationPrincipal Paciente paciente,
-            @RequestBody FilaRequest dtoFila) {
-        TipoFila tipoFila = dtoFila.getTipoFila();
-        TipoAtendimento tipoAtendimento = dtoFila.getTipoAtendimento();
-
-        int posicao = filaService.listarPosicaoNaFila(paciente.getId(), tipoFila, tipoAtendimento);
-
+    public ResponseEntity<Integer> getPosicao(
+            @AuthenticationPrincipal Paciente paciente,
+            @RequestParam TipoAtendimento tipoAtendimento) {
+        int posicao = filaService.getPosicaoNaFila(paciente.getId(), tipoAtendimento);
+        if (posicao == -1) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
         return ResponseEntity.ok(posicao);
     }
 

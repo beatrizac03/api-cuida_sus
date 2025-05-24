@@ -21,8 +21,6 @@ public interface AtendimentoRepository extends JpaRepository<Atendimento, Long> 
     // StatusAtendimento statusAtendimento);
 
     List<Atendimento> findByTipoAtendimentoAndTipoFilaAndStatusAtendimentoOrderByDataCheckinAsc(
-            TipoAtendimento tipoAtendimento,
-            TipoFila tipoFila,
-            StatusAtendimento statusAtendimento);
+            TipoAtendimento tipoAtendimento, TipoFila tipoFila, StatusAtendimento statusAtendimento);
 
 }

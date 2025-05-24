@@ -16,15 +16,17 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.Data;
 
 @Entity
+@Data
 public class Atendimento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne  // muitos atendimentos para um paciente
+    @ManyToOne // muitos atendimentos para um paciente
     @JoinColumn(name = "id_paciente")
     private Paciente paciente;
 
@@ -36,11 +38,13 @@ public class Atendimento {
     @Enumerated(EnumType.STRING)
     private TipoFila tipoFila;
 
-    @ManyToOne
-    @JoinColumn(name = "id_funcionario")
+    @ManyToOne(optional = true) 
+    @JoinColumn(name = "id_funcionario", nullable = true)
+    @jakarta.annotation.Nullable
     private Funcionario funcionarioResponsavel;
 
-    // data em que foi criado o atendimento, caso seja um atendimento pré-agendado vai ser diferente do dataCheckin
+    // data em que foi criado o atendimento, caso seja um atendimento pré-agendado
+    // vai ser diferente do dataCheckin
     @CreationTimestamp
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime dataAtendimento;
@@ -53,5 +57,6 @@ public class Atendimento {
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime dataCheckout;
 
-    private boolean status;
+    @Enumerated(EnumType.STRING)
+    private StatusAtendimento statusAtendimento;
 }

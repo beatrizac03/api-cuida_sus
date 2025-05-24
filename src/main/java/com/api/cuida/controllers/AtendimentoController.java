@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+/* AtendimentoController = Para gerenciar atendimentos pré-agendados */
 
 @RestController
 public class AtendimentoController {

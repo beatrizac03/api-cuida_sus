@@ -1,6 +1,5 @@
 package com.api.cuida.repositories;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,9 +14,15 @@ public interface AtendimentoRepository extends JpaRepository<Atendimento, Long> 
     Atendimento findByPaciente(Paciente paciente);
 
     //
-    // List<Atendimento> findByTipoFilaAndTipoAtendimentoAndStatusAtendimentoAndDataCheckinBetween(
-    //         TipoFila tipoFila,
-    //         TipoAtendimento tipoAtendimento,
-    //         StatusAtendimento statusAtendimento);
+    // List<Atendimento>
+    // findByTipoFilaAndTipoAtendimentoAndStatusAtendimentoAndDataCheckinBetween(
+    // TipoFila tipoFila,
+    // TipoAtendimento tipoAtendimento,
+    // StatusAtendimento statusAtendimento);
+
+    List<Atendimento> findByTipoAtendimentoAndTipoFilaAndStatusAtendimentoOrderByDataCheckinAsc(
+            TipoAtendimento tipoAtendimento,
+            TipoFila tipoFila,
+            StatusAtendimento statusAtendimento);
 
 }

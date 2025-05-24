@@ -1,8 +1,6 @@
 package com.api.cuida.services;
 
-import java.io.ObjectInputFilter.Status;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,37 +11,28 @@ import com.api.cuida.models.StatusAtendimento;
 import com.api.cuida.models.TipoAtendimento;
 import com.api.cuida.models.TipoFila;
 import com.api.cuida.repositories.AtendimentoRepository;
-import com.api.cuida.repositories.PacienteRepository;
 
 @Service
 public class FilaService {
     @Autowired
     private AtendimentoRepository atendimentoRepository;
 
-    @Autowired
-    private PacienteRepository pacienteRepository;
+    public int listarPosicaoNaFila(Long id_paciente, TipoFila tipoFila, TipoAtendimento tipoAtendimento) {
 
-    // public int listarPosicaoNaFila(String cpf, TipoFila tipoFila, TipoAtendimento
-    // tipoAtendimento) {
-    // Paciente paciente = pacienteRepository.findByCpf(cpf)
-    // .orElseThrow(() -> new RuntimeException("Paciente não encontrado"));
+        List<Atendimento> fila = atendimentoRepository
+                .findByTipoAtendimentoAndTipoFilaAndStatusAtendimentoOrderByDataCheckinAsc(
+                        tipoAtendimento,
+                        tipoFila,
+                        StatusAtendimento.AGUARDANDO_NA_FILA);
 
-    // Atendimento atendimento = atendimentoRepository.findByPaciente(paciente);
+        for (int i = 0; i < fila.size(); i++) {
+            if (fila.get(i).getPaciente().getId().equals(id_paciente)) {
+                return i + 1;
+            }
+        }
 
-    // List<Atendimento> fila = atendimentoRepository
-    // .findByTipoFilaAndTipoAtendimentoAndStatusAtendimentoAndDataCheckinBetween(tipoFila,
-    // tipoAtendimento,
-    // atendimento.getStatusAtendimento());
-
-    // for (int i = 0; i < fila.size(); i++) {
-    // if (fila.get(i).getPaciente().getId().equals(paciente.getId())) {
-    // // posição começa em 1
-    // return i + 1;
-    // }
-    // }
-
-    // throw new RuntimeException("Paciente não está na fila");
-    // }
+        return -1;
+    }
 
     public Atendimento inserirNaFila(Paciente paciente, TipoFila tipoFila, TipoAtendimento tipoAtendimento) {
         Atendimento atendimento = new Atendimento();
@@ -53,6 +42,7 @@ public class FilaService {
         atendimento.setTipoAtendimento(tipoAtendimento);
         atendimento.setStatusAtendimento(StatusAtendimento.AGUARDANDO_NA_FILA);
         atendimento.setDataCheckin(java.time.LocalDateTime.now());
+        atendimento.setDataAtendimento(null);
         atendimentoRepository.save(atendimento);
 
         return atendimento;

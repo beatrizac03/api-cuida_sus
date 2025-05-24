@@ -33,37 +33,24 @@ public class FilaController {
     @Autowired
     private FilaService filaService;
 
-    // @GetMapping("/fila")
-    // public ResponseEntity<Integer> listarPosicaoNaFila(HttpServletRequest
-    // request, @RequestBody FilaRequest dtoFila) {
+    @PostMapping("/fila/posicao")
+    public ResponseEntity<Integer> getPosicaoNaFila(@AuthenticationPrincipal Paciente paciente,
+            @RequestBody FilaRequest dtoFila) {
+        TipoFila tipoFila = dtoFila.getTipoFila();
+        TipoAtendimento tipoAtendimento = dtoFila.getTipoAtendimento();
 
-    // Paciente paciente = (Paciente) request.getAttribute("paciente");
+        int posicao = filaService.listarPosicaoNaFila(paciente.getId(), tipoFila, tipoAtendimento);
 
-    // FilaRequest filaRequest = desserializeDto(dtoFila);
-    // int posicao = filaService.listarPosicaoNaFila(paciente.getCpf(),
-    // filaRequest.getTipoFila(),
-    // filaRequest.getTipoAtendimento());
-
-    // return ResponseEntity.ok(posicao);
-    // }
-
-    @PostMapping("/fila")
-    public ResponseEntity<?> inserirNaFila(@AuthenticationPrincipal Paciente paciente, @RequestBody FilaRequest dtoFila) {
-        Atendimento atendimento = filaService.inserirNaFila(paciente, dtoFila.getTipoFila(), dtoFila.getTipoAtendimento());
-        return ResponseEntity.ok(atendimento);
+        return ResponseEntity.ok(posicao);
     }
 
-    // @PostMapping("/fila")
-    // public ResponseEntity<?> inserirNaFila(@AuthenticationPrincipal Paciente paciente, @RequestParam String tipoFila,
-    //         @RequestParam String tipoAtendimento) {
-    //     //TODO: process POST request
-        
-    //         Atendimento atendimento = filaService.inserirNaFila(paciente, TipoFila.valueOf(tipoFila),
-    //                 TipoAtendimento.valueOf(tipoAtendimento));
-
-    //     return ResponseEntity.ok(atendimento);
-    // }
-    
+    @PostMapping("/fila")
+    public ResponseEntity<?> inserirNaFila(@AuthenticationPrincipal Paciente paciente,
+            @RequestBody FilaRequest dtoFila) {
+        Atendimento atendimento = filaService.inserirNaFila(paciente, dtoFila.getTipoFila(),
+                dtoFila.getTipoAtendimento());
+        return ResponseEntity.ok(atendimento);
+    }
 
     @DeleteMapping("/fila/{cpf}")
     public String removerDaFila(HttpServletRequest request) {

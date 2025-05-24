@@ -48,7 +48,6 @@ public class Atendimento {
 
     // data em que foi criado o atendimento, caso seja um atendimento pré-agendado
     // vai ser diferente do dataCheckin
-    @CreationTimestamp
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime dataAtendimento;
 

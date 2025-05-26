@@ -11,19 +11,20 @@ import org.springframework.web.bind.annotation.*;
 import com.api.cuida.models.Funcionario;
 import com.api.cuida.services.FuncionarioService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@Tag(name = "Funcionário", description = "Gerencia funcionários, com operações para listar, cadastrar, atualizar e remover funcionários do sistema.")
 @RestController
 public class FuncionarioController {
     @Autowired
     private FuncionarioService funcionarioService;
 
-    // TODO: recuperar pacientes
     @GetMapping("/funcionarios")
     public ResponseEntity<List<Funcionario>> listarFuncionarios() {
         List<Funcionario> funcionarios = funcionarioService.listarFuncionarios();
         return ResponseEntity.ok(funcionarios);
     }
 
-    // TODO: recuperar paciente por cpf
     @GetMapping("/funcionarios/{cpf}")
     public ResponseEntity<Funcionario> listarFuncionarioPorCpf(@PathVariable String cpf) {
         Optional<Funcionario> funcionario = funcionarioService.listarFuncionarioPorCpf(cpf);
@@ -31,14 +32,12 @@ public class FuncionarioController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // TODO: inserir paciente no sistema
     @PostMapping("/funcionarios")
     public ResponseEntity<Funcionario> cadastrarFuncionario(@RequestBody Funcionario funcionario) {
         Funcionario res = funcionarioService.cadastrarFuncionario(funcionario);
         return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
-
-    // TODO: atualizar dados de paciente
+    
     @PutMapping("/funcionarios/{id}")
     public ResponseEntity<Funcionario> atualizarFuncionario(@PathVariable Long id, @RequestBody Funcionario funcionario) {
         try {

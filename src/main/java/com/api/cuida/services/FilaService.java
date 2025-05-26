@@ -54,6 +54,14 @@ public class FilaService {
     }
 
     public Atendimento inserirNaFila(Paciente paciente, TipoFila tipoFila, TipoAtendimento tipoAtendimento) {
+
+        // Verifica se o paciente já está AGUARDANDO_NA_FILA. Só poderá entrar em outra fila se concluir o atendimento atual.
+        List<Atendimento> atendimentosEmFila = atendimentoRepository
+                .findByPacienteAndStatusAtendimento(paciente, StatusAtendimento.AGUARDANDO_NA_FILA);
+        if (!atendimentosEmFila.isEmpty()) {
+            throw new RuntimeException("Não foi possível criar um atendimento. Paciente já está na fila");
+        }
+
         Atendimento atendimento = new Atendimento();
 
         atendimento.setPaciente(paciente);
@@ -67,19 +75,14 @@ public class FilaService {
         return atendimento;
     }
 
-    // public void removerDaFila(String cpf, TipoFila tipoFila, TipoAtendimento
-    // tipoAtendimento) {
-    // Paciente paciente = pacienteRepository.findByCpf(cpf)
-    // .orElseThrow(() -> new RuntimeException("Paciente não encontrado"));
+    public void removerDaFila(Paciente paciente) {
+        List<Atendimento> atendimentos = atendimentoRepository
+                .findByPacienteAndStatusAtendimento(paciente, StatusAtendimento.AGUARDANDO_NA_FILA);
 
-    // // Optional<Atendimento> atendimento = atendimentoRepository
-    // // .findByPacienteAndTipoFilaAndTipoAtendimento(paciente, tipoFila,
-    // // tipoAtendimento);
-
-    // if (atendimento.isPresent()) {
-    // atendimentoRepository.delete(atendimento.get());
-    // } else {
-    // throw new RuntimeException("Paciente não está na fila");
-    // }
-    // }
+        if (!atendimentos.isEmpty()) {
+            atendimentoRepository.deleteAll(atendimentos);
+        } else {
+            throw new RuntimeException("Paciente não está na fila");
+        }
+    }
 }

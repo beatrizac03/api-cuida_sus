@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.api.cuida.DTOs.PacienteDto;
 import com.api.cuida.models.Paciente;
 import com.api.cuida.repositories.PacienteRepository;
 
@@ -35,8 +36,14 @@ public class PacienteService implements UserDetailsService {
         return pacienteRepository.findById(id);
     }
 
-    public Paciente cadastrarPaciente(Paciente paciente) {
-        return pacienteRepository.save(paciente);
+    public Paciente cadastrarPaciente(PacienteDto paciente) {
+        Paciente novoPaciente = new Paciente();
+        novoPaciente.setNome(paciente.getNome());
+        novoPaciente.setCpf(paciente.getCpf());
+        novoPaciente.setNomeMae(paciente.getNomeMae());
+        novoPaciente.setCidadeNatal(paciente.getCidadeNatal());
+        
+        return pacienteRepository.save(novoPaciente);
     }
 
     public Paciente atualizarPaciente(Long id, Paciente paciente) {

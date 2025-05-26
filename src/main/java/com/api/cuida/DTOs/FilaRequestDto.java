@@ -10,7 +10,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class FilaRequest {
+public class FilaRequestDto {
     @Autowired
     private TipoFila tipoFila;
 

@@ -11,7 +11,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.api.cuida.models.Paciente;
 import com.api.cuida.repositories.PacienteRepository;
-import com.api.cuida.services.AutenticacaoService;
+import com.api.cuida.services.AuthService;
 import com.api.cuida.services.PacienteService;
 
 import java.io.IOException;

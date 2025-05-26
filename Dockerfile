@@ -19,7 +19,7 @@ FROM openjdk:17-jdk-slim
 EXPOSE 8080
 
 # Copia o arquivo JAR gerado no estágio anterior para o novo contêiner
-COPY --from=build /target/gerenciador_de_tarefas-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=build /target/cuida-0.0.1-SNAPSHOT.jar app.jar
 
 # Define o comando de execução do contêiner
 ENTRYPOINT [ "java", "-jar", "app.jar" ]

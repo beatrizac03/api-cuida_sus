@@ -70,6 +70,7 @@ public class FilaService {
         atendimento.setStatusAtendimento(StatusAtendimento.AGUARDANDO_NA_FILA);
         atendimento.setDataCheckin(java.time.LocalDateTime.now());
         atendimento.setDataAtendimento(null);
+        atendimento.setSalaAtendimento(null);
         atendimentoRepository.save(atendimento);
 
         return atendimento;

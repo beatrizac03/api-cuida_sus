@@ -2,9 +2,6 @@ package com.api.cuida.models;
 
 import java.time.LocalDateTime;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.cglib.core.Local;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import io.micrometer.common.lang.Nullable;
@@ -62,4 +59,7 @@ public class Atendimento {
     @Enumerated(EnumType.STRING)
     @Column(name = "status_atendimento")
     private StatusAtendimento statusAtendimento;
+
+    @Column(name = "sala_atendimento", nullable = true)
+    private String salaAtendimento;
 }

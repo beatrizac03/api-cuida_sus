@@ -11,7 +11,6 @@ import com.api.cuida.services.AuthService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -27,7 +26,7 @@ public class AuthController {
 
     @Operation(summary = "Gera um token JWT caso o paciente esteja cadastrado.")
     @PostMapping("/auth/login")
-    public String login(@RequestBody(description = "Recebe cpf, nomeMae e cidadeNatal do paciente", required = true) PacienteLoginDto paciente) {
+    public String login(@RequestBody PacienteLoginDto paciente) {
         Paciente res = autenticacaoService.login(paciente);
 
         if (res == null) {

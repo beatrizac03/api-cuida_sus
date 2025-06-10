@@ -25,21 +25,22 @@ public class FuncionarioController {
         return ResponseEntity.ok(funcionarios);
     }
 
-    @GetMapping("/funcionarios/{cpf}")
-    public ResponseEntity<Funcionario> listarFuncionarioPorCpf(@PathVariable String cpf) {
-        Optional<Funcionario> funcionario = funcionarioService.listarFuncionarioPorCpf(cpf);
-        return funcionario.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
     @PostMapping("/funcionarios")
     public ResponseEntity<Funcionario> cadastrarFuncionario(@RequestBody Funcionario funcionario) {
         Funcionario res = funcionarioService.cadastrarFuncionario(funcionario);
         return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
-    
+
+    @GetMapping("/funcionarios/{id}")
+    public ResponseEntity<Funcionario> listarFuncionarioPorId(@PathVariable Long id) {
+        Optional<Funcionario> funcionario = funcionarioService.listarFuncionarioPorId(id);
+        return funcionario.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
     @PutMapping("/funcionarios/{id}")
-    public ResponseEntity<Funcionario> atualizarFuncionario(@PathVariable Long id, @RequestBody Funcionario funcionario) {
+    public ResponseEntity<Funcionario> atualizarFuncionario(@PathVariable Long id,
+            @RequestBody Funcionario funcionario) {
         try {
             Funcionario funcionarioAtualizado = funcionarioService.atualizarFuncionario(id, funcionario);
 

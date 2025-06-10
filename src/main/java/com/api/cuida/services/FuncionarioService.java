@@ -18,8 +18,8 @@ public class FuncionarioService {
         return funcionarioRepository.findAll();
     }
 
-    public Optional<Funcionario> listarFuncionarioPorCpf(String cpf) {
-        return funcionarioRepository.findByCpf(cpf);
+    public Optional<Funcionario> listarFuncionarioPorId(Long id) {
+        return funcionarioRepository.findById(id);
     }
 
     public Funcionario cadastrarFuncionario(Funcionario funcionario) {

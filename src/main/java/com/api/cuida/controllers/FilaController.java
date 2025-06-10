@@ -54,13 +54,14 @@ public class FilaController {
                 dtoFila.getTipoAtendimento());
         return ResponseEntity.ok(atendimento);
     }
-
-    @Operation(summary = "Retorna a fila (comum e preferencial) de um tipo de atendimento específico.")
-    @GetMapping("/fila")
-    public List<Atendimento> listarFila(@RequestBody TipoAtendimento tipoAtendimento) {
+    
+    @Operation(summary = "Retorna a fila (comum + preferencial) de um tipo de atendimento específico.")
+    @GetMapping("/fila/{tipoAtendimento}")
+    public List<Atendimento> listarFila(@PathVariable TipoAtendimento tipoAtendimento) {
         return filaService.getFilaIntercalada(tipoAtendimento);
     }
 
+    // Um funcionário pode remover um paciente da fila, mas ele também pode se remover
     @Operation(summary = "Paciente autenticado remove-se da fila de atendimento.")
     @DeleteMapping("/fila")
     public ResponseEntity<?> removerDaFila(@AuthenticationPrincipal Paciente paciente) {

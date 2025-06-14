@@ -6,41 +6,55 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.api.cuida.DTOs.FuncionarioRegistroDto;
 import com.api.cuida.models.Funcionario;
 import com.api.cuida.repositories.FuncionarioRepository;
 
 @Service
 public class FuncionarioService {
-     @Autowired
+    @Autowired
     private FuncionarioRepository funcionarioRepository;
 
     public List<Funcionario> listarFuncionarios() {
         return funcionarioRepository.findAll();
     }
 
-    public Optional<Funcionario> listarFuncionarioPorId(Long id) {
-        return funcionarioRepository.findById(id);
+    public Optional<Funcionario> buscarFuncionarioPorMatricula(String matricula) {
+        return funcionarioRepository.findByMatricula(matricula);
     }
 
-    public Funcionario cadastrarFuncionario(Funcionario funcionario) {
-        return funcionarioRepository.save(funcionario);
+    public Funcionario cadastrarFuncionario(FuncionarioRegistroDto funcionario) {
+        Funcionario novoFuncionario = new Funcionario();
+        novoFuncionario.setMatricula(funcionario.getMatricula());
+        novoFuncionario.setNome(funcionario.getNome());
+        novoFuncionario.setCpf(funcionario.getCpf());
+        novoFuncionario.setSenha(funcionario.getSenha());
+        novoFuncionario.setEmail(funcionario.getEmail());
+        novoFuncionario.setCargo(funcionario.getCargo());
+        novoFuncionario.setTipoAtendimento(funcionario.getTipoAtendimento());
+
+        return funcionarioRepository.save(novoFuncionario);
     }
 
-    public Funcionario atualizarFuncionario(Long id, Funcionario funcionario) {
-        if (!funcionarioRepository.existsById(id)) {
-            throw new RuntimeException("Funcionário não encontrado!"); 
-        }
+    public Funcionario atualizarFuncionario(String matricula, FuncionarioRegistroDto funcionario) {
+        Funcionario funcionarioExistente = funcionarioRepository.findByMatricula(matricula)
+                .orElseThrow(() -> new RuntimeException("Funcionário não encontrado!"));
 
-        funcionario.setId(id);
-        
-        return funcionarioRepository.save(funcionario);
+        funcionarioExistente.setMatricula(funcionario.getMatricula());
+        funcionarioExistente.setNome(funcionario.getNome());
+        funcionarioExistente.setCpf(funcionario.getCpf());
+        funcionarioExistente.setSenha(funcionario.getSenha());
+        funcionarioExistente.setEmail(funcionario.getEmail());
+        funcionarioExistente.setCargo(funcionario.getCargo());
+        funcionarioExistente.setTipoAtendimento(funcionario.getTipoAtendimento());
+
+        return funcionarioRepository.save(funcionarioExistente);
     }
 
-    public void deletarFuncionario(Long id) {
-        if (!funcionarioRepository.existsById(id)) {
-            throw new RuntimeException("Funcionário não encontrado!");
-        }
+    public void deletarFuncionario(String matricula) {
+        Funcionario funcionarioExistente = funcionarioRepository.findByMatricula(matricula)
+                .orElseThrow(() -> new RuntimeException("Funcionário não encontrado!"));
 
-        funcionarioRepository.deleteById(id);
+        funcionarioRepository.delete(funcionarioExistente);
     }
 }

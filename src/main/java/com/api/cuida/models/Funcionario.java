@@ -7,6 +7,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,12 +26,18 @@ public class Funcionario {
     @Column(unique = true, nullable = true)
     private String matricula;
 
-    private String nome;
+    private String nome; 
 
-    @Column(unique = false, nullable = true)
+    @Column(unique = true, nullable = false)
     private String cpf;
     
     private String senha;
+
+    private String email;
+    
+    @ManyToOne
+    @JoinColumn(name = "id_cargo")
+    private CargoFuncionario cargo;
 
     @Enumerated(EnumType.STRING)
     private TipoAtendimento tipoAtendimento;

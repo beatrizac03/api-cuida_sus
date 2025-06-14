@@ -8,4 +8,5 @@ import com.api.cuida.models.Funcionario;
 
 public interface FuncionarioRepository extends JpaRepository<Funcionario, Long> {
     Optional<Funcionario> findByCpf(String cpf);
+    Optional<Funcionario> findByMatricula(String matricula);
 }

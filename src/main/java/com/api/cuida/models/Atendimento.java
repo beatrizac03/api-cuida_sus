@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import io.micrometer.common.lang.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -59,7 +58,8 @@ public class Atendimento {
     @Enumerated(EnumType.STRING)
     @Column(name = "status_atendimento")
     private StatusAtendimento statusAtendimento;
-
-    @Column(name = "sala_atendimento", nullable = true)
-    private String salaAtendimento;
+    
+    @ManyToOne
+    @JoinColumn(name = "id_sala", nullable = true)
+    private SalaAtendimento salaAtendimento;
 }

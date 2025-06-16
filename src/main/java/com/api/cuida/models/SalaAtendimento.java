@@ -2,6 +2,8 @@ package com.api.cuida.models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -16,9 +18,13 @@ public class SalaAtendimento {
     @Column(unique = true, nullable = false)
     private String nomeSala;
 
-    @Column(nullable = true)
-    private String setorSala;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TipoAtendimento tipoAtendimento;
 
     @Column(nullable = true)
-    private Integer capacidade;
+    private String setor;
+
+    @Column(nullable = true)
+    private int capacidade;
 }

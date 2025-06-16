@@ -22,3 +22,11 @@ jwt:
   expiration: 3600000
   token-prefix: Bearer
   header: Authorization
+
+logging:
+  level:
+    root: INFO # nível geral do sistema
+    org.springframework.web: DEBUG # logs do Spring Web (request, dispatch etc)
+    org.springframework.security: DEBUG # logs do Spring Security (autenticação, autorização)
+    com.api.cuida: DEBUG # logs da sua aplicação (pacote base)
+

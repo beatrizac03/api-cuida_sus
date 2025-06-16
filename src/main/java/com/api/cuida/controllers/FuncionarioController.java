@@ -31,42 +31,42 @@ public class FuncionarioController {
         return ResponseEntity.ok(funcionarios);
     }
 
-    @Operation(summary = "Busca um funcionário pela matrícula.")
-    @GetMapping("/funcionarios/{matricula}")
-    public ResponseEntity<Funcionario> buscarFuncionarioPorMatricula(@PathVariable String matricula) {
-        Optional<Funcionario> funcionario = funcionarioService.buscarFuncionarioPorMatricula(matricula);
-        return funcionario.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
+    // @Operation(summary = "Busca um funcionário pela matrícula.")
+    // @GetMapping("/funcionarios/{matricula}")
+    // public ResponseEntity<Funcionario> buscarFuncionarioPorMatricula(@PathVariable String matricula) {
+    //     Optional<Funcionario> funcionario = funcionarioService.buscarFuncionarioPorMatricula(matricula);
+    //     return funcionario.map(ResponseEntity::ok)
+    //             .orElseGet(() -> ResponseEntity.notFound().build());
+    // }
 
-    @Operation(summary = "Cadastra um novo funcionário no sistema.")
-    @PostMapping("/funcionarios")
-    public ResponseEntity<Funcionario> cadastrarFuncionario(@RequestBody FuncionarioRegistroDto funcionario) {
-        Funcionario res = funcionarioService.cadastrarFuncionario(funcionario);
-        return ResponseEntity.status(HttpStatus.CREATED).body(res);
-    }
+    // @Operation(summary = "Cadastra um novo funcionário no sistema.")
+    // @PostMapping("/funcionarios")
+    // public ResponseEntity<Funcionario> cadastrarFuncionario(@RequestBody FuncionarioRegistroDto funcionario) {
+    //     Funcionario res = funcionarioService.cadastrarFuncionario(funcionario);
+    //     return ResponseEntity.status(HttpStatus.CREATED).body(res);
+    // }
 
-    @Operation(summary = "Atualiza um funcionário existente no sistema.")
-    @PutMapping("/funcionarios/{matricula}")
-    public ResponseEntity<Funcionario> atualizarFuncionario(@PathVariable String matricula,
-            @RequestBody FuncionarioRegistroDto funcionario) {
-        try {
-            Funcionario funcionarioAtualizado = funcionarioService.atualizarFuncionario(matricula, funcionario);
+    // @Operation(summary = "Atualiza um funcionário existente no sistema.")
+    // @PutMapping("/funcionarios/{matricula}")
+    // public ResponseEntity<Funcionario> atualizarFuncionario(@PathVariable String matricula,
+    //         @RequestBody FuncionarioRegistroDto funcionario) {
+    //     try {
+    //         Funcionario funcionarioAtualizado = funcionarioService.atualizarFuncionario(matricula, funcionario);
 
-            return ResponseEntity.ok(funcionarioAtualizado);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
+    //         return ResponseEntity.ok(funcionarioAtualizado);
+    //     } catch (RuntimeException e) {
+    //         return ResponseEntity.notFound().build();
+    //     }
+    // }
 
-    @Operation(summary = "Remove um funcionário do sistema pela matrícula.")
-    @DeleteMapping("/funcionarios/{matricula}")
-    public ResponseEntity<Void> deletarFuncionario(@PathVariable String matricula) {
-        try {
-            funcionarioService.deletarFuncionario(matricula);
-            return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
+    // @Operation(summary = "Remove um funcionário do sistema pela matrícula.")
+    // @DeleteMapping("/funcionarios/{matricula}")
+    // public ResponseEntity<Void> deletarFuncionario(@PathVariable String matricula) {
+    //     try {
+    //         funcionarioService.deletarFuncionario(matricula);
+    //         return ResponseEntity.noContent().build();
+    //     } catch (RuntimeException e) {
+    //         return ResponseEntity.notFound().build();
+    //     }
+    // }
 }

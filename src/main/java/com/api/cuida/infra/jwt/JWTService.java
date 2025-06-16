@@ -14,6 +14,10 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+
+/**
+ * Gera e valida tokens JWT
+ */
 @Service
 public class JWTService {
     @Value("${jwt.secret}")
@@ -26,29 +30,44 @@ public class JWTService {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
-	
-	public String generateToken(String cpf) {
+
+    // public String generateToken(String cpf) {
+    // Map<String, Object> claims = new HashMap<>();
+    // return createToken(claims, cpf);
+    // }
+
+    public String generateToken(String identificador, String tipoUsuario) {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, cpf);
+        claims.put("tipo", tipoUsuario); // "PACIENTE" ou "FUNCIONARIO"
+        return createToken(claims, identificador);
     }
 
-	private String createToken(Map<String, Object> claims, String cpf) {
+    private String createToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(cpf)
+                .setSubject(subject) // cpf ou matrícula
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public String extractCpf(String token) {
+    // public String extractCpf(String token) {
+    // return extractClaim(token, Claims::getSubject);
+    // }
+
+    public String extractSubject(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
-    public boolean isTokenValid(String token, String cpf) {
-        final String tokenCpf = extractCpf(token);
-        return (tokenCpf.equals(cpf) && !isTokenExpired(token));
+    // public boolean isTokenValid(String token, String subject) {
+    // final String tokenSubject = extractSubject(token);
+    // return (tokenSubject.equals(subject) && !isTokenExpired(token));
+    // }
+
+    // Extrai o tipo de usuário: "PACIENTE" ou "FUNCIONARIO"
+    public String extractTipo(String token) {
+        return extractClaim(token, claims -> (String) claims.get("tipo"));
     }
 
     private boolean isTokenExpired(String token) {
@@ -71,6 +90,12 @@ public class JWTService {
         } catch (Exception e) {
             return false;
         }
+    }
+
+        // Verifica se o token é válido para um determinado identificador
+    public boolean isTokenValid(String token, String identificadorEsperado) {
+        final String tokenIdentificador = extractSubject(token);
+        return (tokenIdentificador.equals(identificadorEsperado) && !isTokenExpired(token));
     }
 
     private Claims extractAllClaims(String token) {

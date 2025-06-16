@@ -1,6 +1,5 @@
 package com.api.cuida.DTOs;
 
-import com.api.cuida.models.CargoFuncionario;
 import com.api.cuida.models.TipoAtendimento;
 
 import lombok.AllArgsConstructor;
@@ -15,7 +14,7 @@ public class FuncionarioRegistroDto {
     private String cpf;
     private String matricula;
     private String email;
-    private CargoFuncionario cargo;
+    private Long cargoId;
     private TipoAtendimento tipoAtendimento;
     private String senha;
 }

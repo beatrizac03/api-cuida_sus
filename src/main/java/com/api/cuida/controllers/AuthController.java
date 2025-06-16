@@ -2,12 +2,15 @@ package com.api.cuida.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import com.api.cuida.DTOs.FuncionarioLoginDto;
 import com.api.cuida.DTOs.PacienteLoginDto;
 import com.api.cuida.DTOs.FuncionarioRegistroDto;
+import com.api.cuida.DTOs.FuncionarioResponseDto;
 import com.api.cuida.infra.jwt.JWTService;
+import com.api.cuida.models.Funcionario;
 import com.api.cuida.models.Paciente;
 import com.api.cuida.services.AuthService;
 
@@ -16,8 +19,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Tag(name = "Autenticação", description = "Lida com a autenticação de usuários, permitindo login e recuperação de informações do usuário autenticado.")
@@ -38,7 +41,7 @@ public class AuthController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Paciente não encontrado");
         }
 
-        return jwtService.generateToken(res.getCpf());
+        return jwtService.generateToken(res.getCpf(), "PACIENTE");
     }
 
     @Operation(summary = "Retorna o paciente autenticado.")
@@ -48,8 +51,25 @@ public class AuthController {
     }
 
     @PostMapping("/auth/login/funcionarios")
-    public String loginFuncionario(@RequestBody FuncionarioLoginDto funcionario) {
-        return jwtService.generateToken(funcionario.getMatricula());
+    public String loginFuncionario(@RequestBody FuncionarioLoginDto dto) {
+        FuncionarioResponseDto funcionario = autenticacaoService.loginFuncionario(dto);
+
+        return jwtService.generateToken(funcionario.getMatricula(), "FUNCIONARIO");
     }
+
+    @PostMapping("/auth/register/funcionarios")
+    public String registerFuncionario(@RequestBody FuncionarioRegistroDto dto) {
+        FuncionarioResponseDto funcionario = autenticacaoService.registerFuncionario(dto);
+
+        return jwtService.generateToken(funcionario.getMatricula(), "FUNCIONARIO");
+    }
+
+    @GetMapping("/auth/funcionarios/me")
+    public ResponseEntity<FuncionarioResponseDto> getFuncionarioInfo(@AuthenticationPrincipal Funcionario funcionario) {
+        FuncionarioResponseDto dto = autenticacaoService.mapToResponseDto(funcionario);
+
+        return ResponseEntity.ok(dto);
+    }
+    
 
 }

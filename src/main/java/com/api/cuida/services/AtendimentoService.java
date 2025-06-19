@@ -3,6 +3,9 @@ package com.api.cuida.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.api.cuida.models.Atendimento;
+import com.api.cuida.models.Paciente;
+import com.api.cuida.models.StatusAtendimento;
 import com.api.cuida.repositories.AtendimentoRepository;
 import com.api.cuida.repositories.PacienteRepository;
 
@@ -13,8 +16,11 @@ public class AtendimentoService {
     @Autowired
     private PacienteRepository pacienteRepository;
 
-    public void inserirNaFila(String cpf, String tipoAtendimento, String tipoFila) {   
-        
+    public Atendimento buscarAtendimentoAtualDoPaciente(Paciente paciente) {
+        return atendimentoRepository
+                .findFirstByPacienteAndStatusAtendimentoOrderByDataCheckinDesc(
+                        paciente, StatusAtendimento.AGUARDANDO_NA_FILA)
+                .orElseThrow(() -> new RuntimeException("Nenhum atendimento em andamento"));
     }
 
 }

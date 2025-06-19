@@ -1,6 +1,7 @@
 package com.api.cuida.repositories;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -17,4 +18,8 @@ public interface AtendimentoRepository extends JpaRepository<Atendimento, Long> 
             TipoAtendimento tipoAtendimento, TipoFila tipoFila, StatusAtendimento statusAtendimento);
 
     List<Atendimento> findByPacienteAndStatusAtendimento(Paciente paciente, StatusAtendimento statusAtendimento);
+
+    Optional<Atendimento> findFirstByPacienteAndStatusAtendimentoOrderByDataCheckinDesc(
+            Paciente paciente,
+            StatusAtendimento status);
 }

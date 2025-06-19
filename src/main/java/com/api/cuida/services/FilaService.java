@@ -8,15 +8,20 @@ import org.springframework.stereotype.Service;
 
 import com.api.cuida.models.Atendimento;
 import com.api.cuida.models.Paciente;
+import com.api.cuida.models.SalaAtendimento;
 import com.api.cuida.models.StatusAtendimento;
 import com.api.cuida.models.TipoAtendimento;
 import com.api.cuida.models.TipoFila;
 import com.api.cuida.repositories.AtendimentoRepository;
+import com.api.cuida.repositories.SalaRepository;
 
 @Service
 public class FilaService {
     @Autowired
     private AtendimentoRepository atendimentoRepository;
+
+    @Autowired
+    private SalaRepository salaRepository;
 
     public List<Atendimento> getFilaIntercalada(TipoAtendimento tipoAtendimento) {
         List<Atendimento> preferencial = atendimentoRepository
@@ -55,11 +60,12 @@ public class FilaService {
 
     public Atendimento inserirNaFila(Paciente paciente, TipoFila tipoFila, TipoAtendimento tipoAtendimento) {
 
-        // Verifica se o paciente já está AGUARDANDO_NA_FILA. Só poderá entrar em outra fila se concluir o atendimento atual.
+        // Verifica se o paciente já está AGUARDANDO_NA_FILA. Só poderá entrar em outra
+        // fila se concluir o atendimento atual.
         List<Atendimento> atendimentosEmFila = atendimentoRepository
                 .findByPacienteAndStatusAtendimento(paciente, StatusAtendimento.AGUARDANDO_NA_FILA);
         if (!atendimentosEmFila.isEmpty()) {
-            throw new RuntimeException("Não foi possível criar um atendimento. Paciente já está na fila");
+            throw new RuntimeException("Não foi possível criar um atendimento. Paciente já está em outra fila.");
         }
 
         Atendimento atendimento = new Atendimento();
@@ -85,5 +91,22 @@ public class FilaService {
         } else {
             throw new RuntimeException("Paciente não está na fila");
         }
+    }
+
+    public String chamarPacienteNaSala(Long idAtendimento, StatusAtendimento statusAtendimento, String nomeSala) {
+
+        SalaAtendimento sala = salaRepository.findByNomeSala(nomeSala)
+                .orElseThrow(() -> new RuntimeException("Sala não encontrada"));
+
+        Atendimento atendimento = atendimentoRepository.findById(idAtendimento)
+                .orElseThrow(() -> new RuntimeException("Atendimento não encontrado"));
+
+        atendimento.setSalaAtendimento(sala);
+        atendimento.setStatusAtendimento(statusAtendimento);
+
+        atendimentoRepository.save(atendimento);
+
+        return "Paciente chamado para sala " + nomeSala;
+
     }
 }

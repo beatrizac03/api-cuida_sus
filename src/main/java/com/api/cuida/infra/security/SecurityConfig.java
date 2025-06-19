@@ -54,7 +54,7 @@ public class SecurityConfig {
                         .requestMatchers("/", "/auth/login", "/auth/register/funcionarios", "/auth/login/funcionarios",
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",
-                                "/v3/api-docs/**", "/pacientes", "/atendimentos", "/cargos",
+                                "/v3/api-docs/**", "/pacientes", "/atendimentos", "/cargos/**", "/salas/**",
                                 "/error")
                         .permitAll()
                         .requestMatchers(HttpMethod.GET, "/fila/*", "/cargos").permitAll()

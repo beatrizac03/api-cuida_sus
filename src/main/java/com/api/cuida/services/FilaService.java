@@ -1,6 +1,7 @@
 package com.api.cuida.services;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +25,17 @@ public class FilaService {
     private SalaRepository salaRepository;
 
     public List<Atendimento> getFilaIntercalada(TipoAtendimento tipoAtendimento) {
+        List<StatusAtendimento> statusList = Arrays.asList(
+                StatusAtendimento.AGUARDANDO_NA_FILA,
+                StatusAtendimento.EM_ANDAMENTO);
+
         List<Atendimento> preferencial = atendimentoRepository
-                .findByTipoAtendimentoAndTipoFilaAndStatusAtendimentoOrderByDataCheckinAsc(
-                        tipoAtendimento, TipoFila.PREFERENCIAL, StatusAtendimento.AGUARDANDO_NA_FILA);
+                .findByTipoAtendimentoAndTipoFilaAndStatusAtendimentoInOrderByDataCheckinAsc(
+                        tipoAtendimento, TipoFila.PREFERENCIAL, statusList);
 
         List<Atendimento> comum = atendimentoRepository
-                .findByTipoAtendimentoAndTipoFilaAndStatusAtendimentoOrderByDataCheckinAsc(
-                        tipoAtendimento, TipoFila.COMUM, StatusAtendimento.AGUARDANDO_NA_FILA);
+                .findByTipoAtendimentoAndTipoFilaAndStatusAtendimentoInOrderByDataCheckinAsc(
+                        tipoAtendimento, TipoFila.COMUM, statusList);
 
         List<Atendimento> filaFinal = new ArrayList<>();
         int i = 0, j = 0;

@@ -7,8 +7,10 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.Data;
 
 @Entity
+@Data
 public class SalaAtendimento {
 
     @Id
@@ -26,5 +28,5 @@ public class SalaAtendimento {
     private String setor;
 
     @Column(nullable = true)
-    private int capacidade;
+    private Integer capacidade;
 }

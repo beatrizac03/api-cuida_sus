@@ -4,6 +4,7 @@ public enum StatusAtendimento {
     NAO_INICIADO,
     AGUARDANDO_NA_FILA,
     EM_ATENDIMENTO,
+    EM_ANDAMENTO,
     FINALIZADO,
     CANCELADO
 }

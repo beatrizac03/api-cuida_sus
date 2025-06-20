@@ -15,10 +15,8 @@ public class SalaService {
     
     @Autowired
     private SalaRepository salaRepository;
-    
-    // public List<SalaAtendimento> buscarSalasDisponiveis(TipoAtendimento tipoAtendimento, StatusAtendimento statusAtendimento) {
-    //     List<SalaAtendimento> salas = salaRepository.findAllByTipoAtendimentoAndStatusAtendimento(tipoAtendimento, statusAtendimento);
 
-    //     return salas;
-    // }
+    public List<SalaAtendimento> buscarSalasDisponiveis(TipoAtendimento tipo) {
+        return salaRepository.findSalasDisponiveisPorTipo(tipo);
+    }
 }
